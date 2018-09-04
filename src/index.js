@@ -4,8 +4,11 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const jsonParser = require('body-parser').json;
 const app = express();
 const User = require('../models/user');
+
+app.use(jsonParser());
 
 // MongoDB connection
 mongoose.connect('mongodb://localhost:27017/course-api', {useNewUrlParser: true})
@@ -28,12 +31,31 @@ app.set('port', process.env.PORT || 5000);
 // morgan gives us http request logging
 app.use(morgan('dev'));
 
-// TODO add additional routes here
-
 // send a friendly greeting for the root route
 app.get('/', (req, res) => {
   res.json({
     message: 'Welcome to the Course Review API'
+  });
+});
+
+// GET /api/users
+// route to create a new user
+app.get('/api/users', (req, res, next) => {
+  User.find({}, (err, users) => {
+    if (err) return next(err);
+    res.status(200);
+    res.json(users);
+  });
+});
+
+// POST /api/users
+// route to create a new user
+app.post('/api/users', function(req, res, next){
+  var user = new User(req.body);
+  user.save(function(err, question){
+    if(err) return next(err);
+    res.status(201);
+    res.redirect('/'); 
   });
 });
 

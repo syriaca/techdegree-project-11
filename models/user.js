@@ -6,8 +6,7 @@ let Schema = mongoose.Schema;
 let userSchema = new Schema({
     fullName: {
         type: String,
-        required: true,
-        trim: true
+        required: true
     },
     emailAddress: {
         type: String,
@@ -17,8 +16,13 @@ let userSchema = new Schema({
     password: {
         type: String,
         required: true
+    },
+    confirmPassword: {
+        type: String,
+        required: true
     }
 });
 
 let User = mongoose.model('User', userSchema);
+
 module.exports = User;
