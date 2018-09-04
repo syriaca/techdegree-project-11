@@ -7,6 +7,8 @@ const mongoose = require('mongoose');
 const jsonParser = require('body-parser').json;
 const app = express();
 const User = require('../models/user');
+const Course = require('../models/course');
+const Review = require('../models/review');
 
 app.use(jsonParser());
 
@@ -57,6 +59,22 @@ app.post('/api/users', function(req, res, next){
     res.status(201);
     res.redirect('/'); 
   });
+});
+
+// GET /api/courses
+// Returns the Course "_id" and "title" properties
+app.get('/api/courses', (req, res, next) => {
+  Course.find({}, '_id title', (err, courses) => {
+    if (err) return next(err);
+    res.status(200);
+    res.json(courses);
+  });
+});
+
+// GET /api/course/:courseId 200
+// Returns all Course properties and related documents for the provided course ID
+app.get('/api/courses/:coursesId', (req, res, next) => {
+
 });
 
 // uncomment this route in order to test the global error handler
