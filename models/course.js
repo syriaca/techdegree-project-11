@@ -1,9 +1,9 @@
 'use strict';
 
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
 
-var courseSchema = new Schema({
+let courseSchema = new Schema({
     user: [{ type: Schema.Types.ObjectId, ref: 'users' }],
     title: {
         type: String,
@@ -41,5 +41,5 @@ var courseSchema = new Schema({
     ]
 });
 
-var Course = mongoose.model('Course', courseSchema);
+let Course = mongoose.model('Course', courseSchema);
 module.exports = Course;
