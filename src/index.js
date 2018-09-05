@@ -53,7 +53,7 @@ app.get('/api/users', (req, res, next) => {
 // POST /api/users
 // route to create a new user
 app.post('/api/users', function(req, res, next){
-  var user = new User(req.body);
+  let user = new User(req.body);
   user.save(function(err, question){
     if(err) return next(err);
     res.status(201);
@@ -74,7 +74,15 @@ app.get('/api/courses', (req, res, next) => {
 // GET /api/course/:courseId 200
 // Returns all Course properties and related documents for the provided course ID
 app.get('/api/courses/:coursesId', (req, res, next) => {
-
+  let courseId = req.params.coursesId; 
+  Course.findById(courseId)
+        .populate('users')
+        .populate('reviews')
+        .exec((err, course) => {
+    if(err) return next(err);
+    res.status(200);
+    res.json(course);
+  });
 });
 
 // uncomment this route in order to test the global error handler
