@@ -54,7 +54,7 @@ app.get('/api/users', (req, res, next) => {
 // route to create a new user
 app.post('/api/users', function(req, res, next){
   let user = new User(req.body);
-  user.save(function(err, question){
+  user.save(function(err){
     if(err) return next(err);
     res.status(201);
     res.redirect('/'); 
@@ -73,8 +73,8 @@ app.get('/api/courses', (req, res, next) => {
 
 // GET /api/course/:courseId 200
 // Returns all Course properties and related documents for the provided course ID
-app.get('/api/courses/:coursesId', (req, res, next) => {
-  let courseId = req.params.coursesId; 
+app.get('/api/courses/:courseId', (req, res, next) => {
+  let courseId = req.params.courseId; 
   Course.findById(courseId)
         .populate('users')
         .populate('reviews')
@@ -82,6 +82,27 @@ app.get('/api/courses/:coursesId', (req, res, next) => {
     if(err) return next(err);
     res.status(200);
     res.json(course);
+  });
+});
+
+// POST /api/courses 201
+// Creates a course, sets the Location header, and returns no content
+app.post('/api/courses', (req, res, next) => {
+  let course = new Course(req.body);
+  course.save(function(err){
+    if(err) return next(err);
+    res.status(201);
+    res.redirect('/');
+  });
+});
+
+// PUT /api/courseID 204
+// Updates a course and returns no content
+app.put('/api/courses/:courseId', (req, res, next) => {
+  Course.update(req.body, (err, result) => {
+    if(err) return next(err);
+    res.status(204);
+    res.json(result);
   });
 });
 
