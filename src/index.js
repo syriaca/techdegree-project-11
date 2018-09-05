@@ -79,10 +79,10 @@ app.get('/api/courses/:courseId', (req, res, next) => {
         .populate('users')
         .populate('reviews')
         .exec((err, course) => {
-    if(err) return next(err);
-    res.status(200);
-    res.json(course);
-  });
+            if(err) return next(err);
+            res.status(200);
+            res.json(course);
+    });
 });
 
 // POST /api/courses 201
@@ -96,13 +96,33 @@ app.post('/api/courses', (req, res, next) => {
   });
 });
 
-// PUT /api/courseID 204
+// PUT /api/courseId 204
 // Updates a course and returns no content
 app.put('/api/courses/:courseId', (req, res, next) => {
   Course.update(req.body, (err, result) => {
     if(err) return next(err);
     res.status(204);
     res.json(result);
+  });
+});
+
+// POST /api/courses/:courseId/reviews 201 - 
+// Creates a review for the specified course ID, sets the Location header to the related course, and returns no content
+app.post('/api/courses/:courseId/reviews', (req, res, next) => {
+  let courseId = req.params.courseId;
+  Course.findById(courseId, (err, course) => {
+    if(err) return next(err);
+    let newReview = new Review(req.body);
+    newReview.save((err, newReview) => {
+      if (err) return next(err);
+      course.reviews.push(newReview);
+      course.save(function(err, newCourse){
+          if(err) return (next(err))
+      });
+      res.status(201);
+      res.location("/");
+      res.send();
+    });
   });
 });
 
