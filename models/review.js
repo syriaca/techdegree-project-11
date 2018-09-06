@@ -1,10 +1,13 @@
 'use strict';
 
 let mongoose = require('mongoose');
+let user = require('./user.js');
+
 let Schema = mongoose.Schema;
 
+
 let reviewSchema = new Schema({
-   user: [{ type: Schema.Types.ObjectId, ref: 'users' }],
+   user: {type: mongoose.Schema.Types.ObjectId, ref: 'user' },
    postedOn: { type: Date, default: Date.now },
    rating: {
        type: Number,
@@ -14,5 +17,5 @@ let reviewSchema = new Schema({
    review: String
 });
 
-let Review = mongoose.model('Review', reviewSchema);
+let Review = mongoose.model('review', reviewSchema);
 module.exports = Review;

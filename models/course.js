@@ -1,10 +1,13 @@
 'use strict';
 
 let mongoose = require('mongoose');
+let user = require('./user.js');
+let review = require('./review.js');
+
 let Schema = mongoose.Schema;
 
 let courseSchema = new Schema({
-    user: [{ type: Schema.Types.ObjectId, ref: 'users' }],
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
     title: {
         type: String,
         required: true,
@@ -31,15 +34,11 @@ let courseSchema = new Schema({
         ],
     reviews: [
         {
-            _id: [
-                    { 
-                        type: Schema.Types.ObjectId, 
-                        ref: 'reviews'
-                    }
-                ]
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'review'
         }
     ]
 });
 
-let Course = mongoose.model('Course', courseSchema);
+let Course = mongoose.model('course', courseSchema);
 module.exports = Course;

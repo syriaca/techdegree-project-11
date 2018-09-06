@@ -76,12 +76,11 @@ app.get('/api/courses', (req, res, next) => {
 app.get('/api/courses/:courseId', (req, res, next) => {
   let courseId = req.params.courseId; 
   Course.findById(courseId)
-        .populate('users')
-        .populate('reviews')
+        .populate('user review')
         .exec((err, course) => {
-            if(err) return next(err);
-            res.status(200);
-            res.json(course);
+          if(err) return next(err);
+          res.status(200);
+          res.json(course);
     });
 });
 
