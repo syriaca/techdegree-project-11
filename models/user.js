@@ -21,9 +21,34 @@ let UserSchema = new Schema({
     }
 });
 
-UserSchema.pre('save', function(next) {
+UserSchema.statics.authenticate = (email, password, callback) => {
+    User.findOne({emailAddress: email})
+        .exec((error, user) => {
+            if (error) { 
+                return callback(error);
+            } else if (!user) {
+                let err = new Error('User not found.');
+                err.status = 401;
+                return callbacl(err);
+            }
+            if (password === user.password) {
+                return callback(null, user)
+            } else {
+                
+            bcrypt.compare(password, user.password, (err, result) => {
+                if(result === true) {
+                    return callback(null, user);
+                } else {
+                    return callback();
+                }
+            });
+        }
+    });
+};
+
+UserSchema.pre('save', (next) => {
     let user = this;
-    bcrypt.hash(user.password, 10, function(err, hash){
+    bcrypt.hash(user.password, 10, (err, hash) => {
         if(err) return next(err);
         user.password = hash;
         next();
