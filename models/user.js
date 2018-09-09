@@ -11,6 +11,7 @@ let userSchema = new Schema({
     emailAddress: {
         type: String,
         required: true,
+        unique: true,
         match: [/.+\@.+\..+/, 'Please fill a valid email address']
     },
     password: {

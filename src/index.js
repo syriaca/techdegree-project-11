@@ -111,19 +111,23 @@ app.post('/api/courses/:courseId/reviews', (req, res, next) => {
   let courseId = req.params.courseId;
   Course.findById(courseId, (err, course) => {
     if(err) return next(err);
-    let newReview = new Review(req.body);
-    newReview.save((err, newReview) => {
-      if (err) return next(err);
-      course.reviews.push(newReview);
-      course.save(function(err, newCourse){
-          if(err) return (next(err))
+    Review.create(req.body, function(err, review) {
+      course.set({
+        reviews: [...course.reviews, review]
       });
-      res.status(201);
-      res.location("/");
-      res.send();
+      course.save(function(err, course) {
+        if (err) {
+            next(err);
+        } else {
+            res.location(`/api/courses/${req.params.courseId}`);
+            res.status(201);
+            res.end();
+        }
+    }); 
     });
   });
 });
+
 
 // uncomment this route in order to test the global error handler
 // app.get('/error', function (req, res) {
