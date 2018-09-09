@@ -4,10 +4,10 @@ let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
 
-let reviewSchema = new Schema({
+let ReviewSchema = new Schema({
    user: {
        type: mongoose.Schema.Types.ObjectId, 
-       ref: 'user' 
+       ref: 'User' 
     },
    postedOn: { type: Date, default: Date.now },
    rating: {
@@ -18,5 +18,5 @@ let reviewSchema = new Schema({
    review: String
 });
 
-let Review = mongoose.model('review', reviewSchema);
+let Review = mongoose.model('Review', ReviewSchema);
 module.exports = Review;

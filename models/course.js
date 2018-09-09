@@ -3,10 +3,10 @@
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
-let courseSchema = new Schema({
+let CourseSchema = new Schema({
     user: { 
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'user' 
+        ref: 'User' 
     },
     title: {
         type: String,
@@ -35,10 +35,11 @@ let courseSchema = new Schema({
     reviews: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'review'
+            ref: 'Review'
         }
     ]
 });
 
-let Course = mongoose.model('course', courseSchema);
+let Course = mongoose.model('Course', CourseSchema);
+
 module.exports = Course;
