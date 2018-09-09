@@ -113,17 +113,14 @@ app.post('/api/courses/:courseId/reviews', (req, res, next) => {
     if(err) return next(err);
     Review.create(req.body, function(err, review) {
       course.set({
-        reviews: [...course.reviews, review]
+        reviews: [...course.reviews, review]    
       });
       course.save(function(err, course) {
-        if (err) {
-            next(err);
-        } else {
-            res.location(`/api/courses/${req.params.courseId}`);
-            res.status(201);
-            res.end();
-        }
-    }); 
+        if (err) return  next(err);
+        res.location(`/api/courses/${req.params.courseId}`);
+        res.status(201);
+        res.end();
+      }); 
     });
   });
 });
