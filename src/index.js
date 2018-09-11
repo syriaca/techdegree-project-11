@@ -9,6 +9,7 @@ const app = express();
 const User = require('../models/user');
 const Course = require('../models/course');
 const Review = require('../models/review');
+const mid = require('../middleware');
 
 app.use(jsonParser());
 
@@ -86,7 +87,7 @@ app.get('/api/courses/:courseId', (req, res, next) => {
 
 // POST /api/courses 201
 // Creates a course, sets the Location header, and returns no content
-app.post('/api/courses', (req, res, next) => {
+app.post('/api/courses', mid.authenticateUser, (req, res, next) => {
   let course = new Course(req.body);
   course.save(function(err){
     if(err) return next(err);
@@ -97,7 +98,7 @@ app.post('/api/courses', (req, res, next) => {
 
 // PUT /api/courseId 204
 // Updates a course and returns no content
-app.put('/api/courses/:courseId', (req, res, next) => {
+app.put('/api/courses/:courseId', mid.authenticateUser, (req, res, next) => {
   Course.update(req.body, (err, result) => {
     if(err) return next(err);
     res.status(204);
@@ -107,7 +108,7 @@ app.put('/api/courses/:courseId', (req, res, next) => {
 
 // POST /api/courses/:courseId/reviews 201 - 
 // Creates a review for the specified course ID, sets the Location header to the related course, and returns no content
-app.post('/api/courses/:courseId/reviews', (req, res, next) => {
+app.post('/api/courses/:courseId/reviews', mid.authenticateUser, (req, res, next) => {
   let courseId = req.params.courseId;
   Course.findById(courseId, (err, course) => {
     if(err) return next(err);
