@@ -44,10 +44,11 @@ app.get('/', (req, res) => {
 // GET /api/users
 // route to get users
 app.get('/api/users', mid.authenticateUser, (req, res, next) => {
+  console.log(req.session);
   User.find({}, (err, users) => {
     if (err) return next(err);
     res.status(200);
-    res.json(users);
+    res.json(req.authenticateUser);
   });
 });
 
