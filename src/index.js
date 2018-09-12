@@ -42,8 +42,8 @@ app.get('/', (req, res) => {
 });
 
 // GET /api/users
-// route to create a new user
-app.get('/api/users', (req, res, next) => {
+// route to get users
+app.get('/api/users', mid.authenticateUser, (req, res, next) => {
   User.find({}, (err, users) => {
     if (err) return next(err);
     res.status(200);
@@ -99,7 +99,14 @@ app.post('/api/courses', mid.authenticateUser, (req, res, next) => {
 // PUT /api/courseId 204
 // Updates a course and returns no content
 app.put('/api/courses/:courseId', mid.authenticateUser, (req, res, next) => {
-  Course.update(req.body, (err, result) => {
+  Course.update({
+    $set: {
+        title: req.body.title,
+        description: req.body.description,
+        user: req.body.user,
+        steps: req.body.steps
+      }
+    }, (err, result) => {
     if(err) return next(err);
     res.status(204);
     res.json(result);
